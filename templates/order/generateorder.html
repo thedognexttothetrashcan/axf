@@ -1,0 +1,69 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block linkscript%}
+    <link rel="stylesheet" type="text/css" href="{% static 'car/css/cart.css' %}" />
+    <script type="text/javascript" charset="utf-8" src="{% static 'car/js/cart.js' %}" ></script>
+{% endblock linkscript%}
+
+{% block base %}
+<div id="cart">
+    <h3><b>购物车</b></h3>
+<form action="{% url 'App:doOrder' %}" method="post" id="myForm">
+    <input type="hidden" name="money" value="{{ money }}">
+    {% csrf_token %}
+    <section class="full">
+		<section>
+			<ul>
+				<li>
+                    <div class="clear">
+                        <p class="infoJustify">收货人<b></b></p><p>:<span>{{ address.name }}</span></p>
+                    </div>
+                </li>
+				<li>
+                    <div class="clear">
+                        <p class="infoJustify">电话<b></b></p><p>:<span>{{ address.phone }}</span><a class="change">修改></a></p>
+                    </div>
+                </li>
+				<li>
+                    <div class="clear"><p class="infoJustify">收货地址<b></b></p><p>:<span>{{ address.address }}</span></p>
+                    </div>
+                </li>
+			</ul>
+
+			<section class="delivery">
+			</section>
+			<section class="delivery">
+				<span>收货备注</span> <input type="text" name="message" placeholder="可输入100字以内特殊要求内容"/>
+			</section>
+
+
+            <menu>
+				<ul>
+                    {% for item in carData%}
+                    <li id="{{item.productid}}li" class="menuList">
+                        <div class="confirm">
+                        </div>
+                        <a href="#">
+                            <img src="{{item.goods.productimg}}"/>
+                            <p>{{item.goods.productname}}</p>
+                            <span class="{{productprice}}">{{item.goods.price}}</span>
+                        </a>
+                        <section>
+                            <span>{{item.num}}</span>
+                        </section>
+                    </li>
+                    {% endfor %}
+
+					<li class="payTheBill">
+						<div class="confirm"></div>
+						<p><span>总价:{{ money }}</span></p>
+						<a id="ok" onclick="document.getElementById('myForm').submit();">下订单</a>
+					</li>
+				</ul>
+			</menu>
+		</section>
+	</section>
+</div>
+</form>
+{% endblock base %}
